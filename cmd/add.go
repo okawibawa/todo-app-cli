@@ -15,12 +15,9 @@ var addCmd = &cobra.Command{
 	Long:  "Add a new todo item to the database",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		flag, err := cmd.Flags().GetBool("completed")
-		if err != nil {
-			return fmt.Errorf("getting flag value: %w\n", err)
-		}
+		var err error
 
-		_, err = DbPool.Exec(context.Background(), `insert into todos (title, completed) values ($1, $2)`, args[0], flag)
+		_, err = DbPool.Exec(context.Background(), `insert into todos (title, completed) values ($1, $2)`, args[0], isCompleted)
 		if err != nil {
 			return fmt.Errorf("Error adding a new todo item: %w", err)
 		}

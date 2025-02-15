@@ -19,14 +19,21 @@ type Todo struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+var isGettingAllTodos bool
+
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List todos",
 	Long:  "List available todos from the database",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var todoSlice []Todo
+		query := `select * from todos`
 
-		rows, err := DbPool.Query(context.Background(), `select * from todos`)
+		if !isGettingAllTodos {
+			query += ` where completed = false`
+		}
+
+		rows, err := DbPool.Query(context.Background(), query)
 		if err != nil {
 			return fmt.Errorf("error selecting from todos: %w", err)
 		}
@@ -61,5 +68,6 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
+	listCmd.Flags().BoolVarP(&isGettingAllTodos, "all", "a", false, "list all todos, including the completed ones")
 	rootCmd.AddCommand(listCmd)
 }
