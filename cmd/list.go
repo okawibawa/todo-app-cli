@@ -49,7 +49,7 @@ var listCmd = &cobra.Command{
 		}
 
 		writer := tabwriter.NewWriter(os.Stdout, 0, 2, 6, ' ', 0)
-		writer.Write([]byte("ID\tTitle\tTime\tCompleted\n"))
+		writer.Write([]byte("ID\tTask\tCreated\tDone\n"))
 		for _, todo := range todoSlice {
 			durationSinceCreation := time.Since(todo.CreatedAt).Truncate(time.Hour)
 
