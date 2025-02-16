@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var isCompleted bool
-
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add a new todo item",
@@ -16,6 +14,11 @@ var addCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
+
+		isCompleted, err := cmd.Flags().GetBool("completed")
+		if err != nil {
+			return fmt.Errorf("error getting flag value: %w", err)
+		}
 
 		_, err = DbPool.Exec(context.Background(), `insert into todos (title, completed) values ($1, $2)`, args[0], isCompleted)
 		if err != nil {
@@ -27,7 +30,7 @@ var addCmd = &cobra.Command{
 }
 
 func init() {
-	addCmd.Flags().BoolVarP(&isCompleted, "completed", "c", false, "whether if the todo item is completed or not (default to false)")
+	addCmd.Flags().BoolP("completed", "c", false, "whether if the todo item is completed or not (default to false)")
 
 	rootCmd.AddCommand(addCmd)
 }
