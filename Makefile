@@ -3,16 +3,9 @@
 # Commands
 build:
 	@echo "Building binary..."
-	@go build -o  build/ -v main.go && echo "Binary built successfully!" || { echo "Failed building binary!"; exit 1; }
+	@go build -o  ./tasks -v main.go && echo "Binary built successfully!" || { echo "Failed building binary!"; exit 1; }
 
 clean:
 	@echo "Cleaning binary..."
-	@rm -rf build/
+	@rm -rf ./tasks && echo "Binary cleaned!"
 
-run-bin:
-	@echo "Running binary..."
-	@./build/main
-
-run-dev:
-	@echo "Running development server..."
-	@go run main.go || { echo "Failed running development server"; exit 1; }
