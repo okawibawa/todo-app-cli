@@ -19,15 +19,14 @@ Each command supports specific flags that control how the command operates.
 Add `-h` or `--help` at the end of the command to show detailed information of the command.
 
 ## Installing
-> [!NOTE]
-> Create a `.env` file and set the `DB_URL` value before proceeding with installation.
 
 In order to be able to run the app using `todo-app-cli` command, follow these steps:
 ```bash
-$ git clone {url_to_this_repo}
+$ git clone "url_to_this_repo"
 $ cd /path/to/todo-app-cli
 $ go mod tidy # Checks go.mod file and download missing dependencies, or removed unneeded ones.
 $ go install . # Compile and install the `todo-app-cli` binary to $GOBIN directory (or $GOPATH/bin). 
+$ export TODO_APP_CLI_DB_URL="your_todo_app_cli_db_url" # Replace with your actual database URL
 $ export PATH=$PATH:$(go env GOBIN)  # Or export PATH=$PATH:$(go env GOPATH)/bin if GOBIN is empty
 $ echo 'export PATH=$PATH:$(go env GOBIN)' >> ~/.zshrc  # Or ~/.bashrc, etc. to make PATH persistence
 $ source ~/.zshrc  # Or restart your terminal
@@ -35,13 +34,23 @@ $ source ~/.zshrc  # Or restart your terminal
 
 Verify the installation by running `which todo-app-cli`, it should show the path to the binary. Then, try running `todo-app-cli list`.
 
+In order to make the `TODO_APP_CLI_DB_URL` environment variable persistent accross terminal sessions, you can add the `export` command to your shell configuration file (`~/.zshrc`, `~/.bashrc`, etc) with this command:  
+
+```bash
+$ echo 'export TODO_APP_CLI_DB_URL="your_todo_app_cli_db_url"' >> ~/.zshrc
+$ source ~/.zshrc
+```
+
+The `>>` operator appends to the file. Be careful not to use `>` (which overwrites the file) by mistake!
+
 ## Running Locally
+
 > [!NOTE]
-> Create a `.env` file and set the `DB_URL` value before proceeding with installation.
+> Create a `.env` file and set the `TODO_APP_CLI_DB_URL` value before proceeding with installation.
 
 Running the application locally is pretty straightforward:
 ```bash
-$ git clone {url_to_this_repo}
+$ git clone "url_to_this_repo"
 $ cd /path/to/todo-app-cli
 $ go mod tidy # Checks go.mod file and download missing dependencies, or removed unneeded ones.
 $ go run main.go list # Show list of todos in the database
